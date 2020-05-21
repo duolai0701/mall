@@ -9,11 +9,16 @@
           <a href="javascript:;">协议规则</a>
         </div>
         <div class="topbar-user">
-          <a href="javascript:;" v-if="!username" @click="login">登录</a>
-          <a href="javascript:;" v-if="username">{{username}}</a>
-          <a href="javascript:;" v-if="username">我的订单</a>
           <a href="javascript:;"
-             class="my-cart" @click="goToCart"><span class="icon-cart"></span>购物车</a>
+             v-if="!username"
+             @click="login">登录</a>
+          <a href="javascript:;"
+             v-if="username">{{username}}</a>
+          <a href="javascript:;"
+             v-if="username">我的订单</a>
+          <a href="javascript:;"
+             class="my-cart"
+             @click="goToCart"><span class="icon-cart"></span>购物车({{cartCount}})</a>
         </div>
       </div>
     </div>
@@ -27,7 +32,9 @@
             <span>小米手机</span>
             <div class="children">
               <ul>
-                <li class="product" v-for="(item,index) in phoneList" :key='index'>
+                <li class="product"
+                    v-for="(item,index) in phoneList"
+                    :key='index'>
                   <a :href="'/product/'+item.id"
                      target="_blank">
                     <div class="pro-img">
@@ -159,32 +166,41 @@
   </div>
 </template>
 <script>
+import {mapState} from 'vuex'
 export default {
   name: 'nav-header',
   data () {
     return {
-      username: '',
       phoneList: []
     }
   },
-  filters:{
-    currency(val){
-      if(!val) return '0.00';
-      return "¥" +val.toFixed(2) +'元';
+  computed: {
+    // username () {
+    //   return this.$store.state.username
+    // },
+    // cartCount () {
+    //   return this.$store.state.cartCount
+    // },
+    ...mapState(['username','cartCount'])
+  },
+  filters: {
+    currency (val) {
+      if (!val) return '0.00';
+      return "¥" + val.toFixed(2) + '元';
     }
   },
   mounted () {
     this.getProductList()
   },
   methods: {
-    login(){
+    login () {
       this.$router.push('/login');
     },
     getProductList () {
       this.axios.get('/products', {
         params: {
           categoryId: "100012",
-          pageSize:6
+          pageSize: 6
         }
       }).then((res) => {
         // if (res.list.length >= 6) {
@@ -193,7 +209,7 @@ export default {
         this.phoneList = res.list
       })
     },
-    goToCart(){
+    goToCart () {
       this.$router.push('/cart');
     }
   }
