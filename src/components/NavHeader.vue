@@ -36,7 +36,7 @@
                     v-for="(item,index) in phoneList"
                     :key='index'>
                   <a :href="'/product/'+item.id"
-                     target="_blank">
+                     >
                     <div class="pro-img">
                       <img v-lazy="item.mainImage"
                            :alt="item.subtitle">
